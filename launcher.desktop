@@ -1,0 +1,6 @@
+[Desktop Entry]
+version=1.0
+Name = kolibri
+Exec = /home/pi/systemconfig/serverapp/prathamkolibriserver/SOP.py
+Icon = /home/pi/systemconfig/serverapp/prathamkolibriserver/logo.jpg
+Type = Application
