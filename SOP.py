@@ -8,6 +8,7 @@ from tkinter import ttk
 import socket
 import errno
 import os
+import csv
 import subprocess
 import time
 import sys
@@ -81,107 +82,36 @@ def start_kolibri():
         messagebox.showinfo("SERVERAPP", str)
 
 
-# def on_camera():
-#     try:
-#         os.system('sudo modprobe bcm2835-v4l2')
-#         messagebox.showinfo("SERVERAPP", "camera is on")
-#     except Exception as cam:
-#         messagebox.showinfo("SERVERAPP", cam)
+def superuser():
+
+    file = "C:\prathamdata\Csvfiles\output.csv"
+
+    i=0
+    csvfile = open(file, 'r+')
+
+    data = csv.reader(csvfile, delimiter=',')
+
+    messagebox.showinfo("SERVERAPP", "wait while user is being created")
+
+    for line in data:
+        user_creation='kolibri manage shell -c "from kolibri.auth.models import FacilityUser; FacilityUser.objects.create_superuser(\'' + line[0] + '\',\'' + line[1] + '\')"'
+        os.system(user_creation)
+        print(i)
+        i = i+1
+
+    csvfile.close()
+
+    messagebox.showinfo("SERVERAPP", "user creation completed!")
 
 
-# def video_call():
-#     try:
-#         os.system('sudo service dnsmasq stop')
-#         os.system('sudo modprobe bcm2835-v4l2')
-#         check_internet()
-#         try:
-#             create_window()
-#         except Exception as w:
-#             messagebox.showinfo("SERVERAPP", w)
-#     except Exception as vid:
-#         messagebox.showinfo("SERVERAPP", vid)
+def coach():
 
+    messagebox.showinfo("SERVERAPP","wait while youth is being created")
 
-# def create_window():
-#     win = tk.Toplevel(window)
-#     win.resizable(0, 0)
-#     win.geometry("250x150")
-#     # win.configure(bg='gray')
-#     window_width = win.winfo_reqwidth()
-#     window_height = win.winfo_reqheight()
+    file = 'kolibri manage importusers C:\prathamdata\Csvfiles\learners.csv'
+    os.system(file)
 
-#     position_right = int(win.winfo_screenwidth() / 2 - window_width / 2)
-#     position_down = int(win.winfo_screenheight() / 2 - window_height / 2)
-
-#     win.geometry("+{}+{}".format(position_right, position_down))
-
-#     var = tk.IntVar()
-
-#     choose = tk.Label(win, text="select a time for the call", padx=20, foreground='black')
-#     choose.grid(row=0, column=0)
-
-#     select1 = tk.Radiobutton(win, text="20 minutes", variable=var, value=1)
-#     select1.grid(row=1, column=0)
-#     select2 = tk.Radiobutton(win, text="30 minutes", variable=var, value=2)
-#     select2.grid(row=2, column=0)
-#     select3 = tk.Radiobutton(win, text="60 minutes", variable=var, value=3)
-#     select3.grid(row=3, column=0)
-#     select4 = tk.Radiobutton(win, text="90 minutes", variable=var, value=4)
-#     select4.grid(row=4, column=0)
-
-#     def select_value():
-#         selection = var.get()
-#         # print('Pushed the button!')
-#         # print('var has value', selection)
-#         text_dict = {
-#             0: 0,
-#             1: 20,
-#             2: 30,
-#             3: 60,
-#             4: 90
-#         }
-#         global minute_to_get
-
-#         if text_dict[selection] == 0:
-#             messagebox.showinfo("SERVERAPP", "please select the time")
-#             sys.exit(0)
-#         else:
-#             minute_to_get = text_dict[selection]
-#         win.destroy()
-#         site = "https://www.gmail.com/"
-#         p = subprocess.Popen(['chromium-browser', site])
-#         poll = p.poll()
-#         time.sleep(120)
-
-#         def countdown(n):
-#             while n > 0:
-#                 # print(n)
-#                 n = n - 1
-#                 if n == 300:
-#                     window.call('wm', 'attributes', '.', '-topmost', '1')
-#                     messagebox.showinfo("SERVERAPP", "browser will be closed in 5 minutes please logout or "
-#                                                      "if you want to continue please setup another call")
-#                 time.sleep(1)
-#                 if checkIfProcessRunning('chromium-browser'):
-#                     pass
-#                 else:
-#                     os.system('sudo service dnsmasq start')
-#                     sys.exit(0)
-
-#         countdown(60 * int(minute_to_get) + 300)
-#         # countdown(int(minute_to_get))
-
-#         p.kill()
-#         # os.system('sudo service dnsmasq start')
-#         if poll is None:
-#             try:
-#                 os.system('sudo service dnsmasq start')
-#                 sys.exit(0)
-#             except Exception as dn:
-#                 messagebox.showinfo("SERVERAPP", dn)
-
-#     ok_btn = tk.Button(win, text='OK', width=10, command=select_value)
-#     ok_btn.grid(row=7, column=0)
+    messagebox.showinfo("SERVERAPP", "youth creation completed!")
 
 
 window = Tk()
@@ -201,11 +131,11 @@ start.grid(row=1, column=0)
 stop = Button(window, text="Stop Kolibri", width=15, foreground='green', background='black', command=stop_kolibri)
 stop.grid(row=1, column=1)
 
-# camera = Button(window, text="Turn on camera", width=15, foreground='green', background='black', command=on_camera)
-# camera.grid(row=2, column=0)
+superusers = Button(window, text="Create Users", width=15, foreground='green', background='black', command=superuser)
+superusers.grid(row=2, column=0)
 
-# video = Button(window, text="Video Call", width=15, foreground='green', background='black', command=video_call)
-# video.grid(row=2, column=1)
+youth = Button(window, text="Create Youth", width=15, foreground='green', background='black', command=coach)
+youth.grid(row=2, column=1)
 
 windowWidth = window.winfo_reqwidth()
 windowHeight = window.winfo_reqheight()
